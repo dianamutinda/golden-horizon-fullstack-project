@@ -19,4 +19,6 @@ model user{
   email String @unique
   phone Int @unique
   password String 
+
+  @@map("users_table")
 }
