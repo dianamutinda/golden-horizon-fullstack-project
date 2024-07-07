@@ -59,7 +59,7 @@ body {
 }
 
 @media screen and (max-width: 46.875em) {
-  .header{
+  .header {
     flex-wrap: wrap;
     justify-content: center;
   }
