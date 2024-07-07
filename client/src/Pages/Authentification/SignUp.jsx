@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import "./Authentification.css";
 import { useFormik } from "formik";
+import { useState } from "react";
 
 const SignUp = () => {
+  
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -12,11 +18,31 @@ const SignUp = () => {
       password: "",
       conPassword: "",
     },
-    onSubmit: (formState) => {
-      console.log(formState);
+    onSubmit: async (formState) => {
+      try {
+        const response = await fetch("http://localhost:3000/api/users/register", {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          }, 
+          body: JSON.stringify(formState)
+        })
+        const data = await response.json()
+        if (data.success === true){
+          navigate("/log in")
+        } else{
+          setError(data.message)
+        }
+
+
+
+        console.log(response);
+      } catch (error) {
+        setError(error.message)
+      }
     },
   });
-  console.log(formik.values);
+  // console.log(formik.values);
   return (
     <section>
       <div className="form1">
@@ -89,6 +115,7 @@ const SignUp = () => {
           <p className="form-text">
             already have an account? <Link to="/log in">log in here</Link>
           </p>
+          <p className="errormsg">{error && error}</p>
         </form>
       </div>
     </section>

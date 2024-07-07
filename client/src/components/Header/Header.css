@@ -57,3 +57,17 @@ body {
   padding: 8px;
   border-radius: 10px;
 }
+
+@media screen and (max-width: 46.875em) {
+  .header{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+@media screen and (max-width: 37.5em) {
+  .cta {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+}
