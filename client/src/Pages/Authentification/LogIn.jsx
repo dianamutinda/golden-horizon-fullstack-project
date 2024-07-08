@@ -1,17 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-
+import { useState } from "react";
+const apiurl = import.meta.env.VITE_API_URL_ROOT;
 const LogIn = () => {
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: (formState) => {
-      console.log(formState);
+    onSubmit: async (formState) => {
+      try {
+        setError(false);
+        const response = await fetch(`${apiurl}/api/users/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formState),
+        });
+        // console.log(response);
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success === true) {
+          // setError(false);
+          navigate("/book now");
+        } else {
+          setError(response.message);
+        }
+      } catch (error) {
+        setError(error.message);
+      }
     },
   });
-  console.log(formik.values);
+  // console.log(formik.values);
   return (
     <section>
       <div className="form2">
@@ -45,6 +70,7 @@ const LogIn = () => {
           <p className="form-text">
             don't have an account? <Link to="/sign up">sign up here</Link>
           </p>
+          <p className="errormsg">{error && error}</p>
         </form>
       </div>
     </section>

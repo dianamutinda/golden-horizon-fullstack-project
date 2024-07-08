@@ -22,3 +22,24 @@ model user{
 
   @@map("users_table")
 }
+model contact{
+  contactid String @id @default(uuid())
+  firstName String
+  lastName String
+  email String @unique
+  phone Int @unique
+  message String 
+
+  @@map("contact_table")
+}
+model book{
+  bookId String @id @default(uuid())
+  firstName String
+  lastName String
+  email String @unique
+  checkIn DateTime
+  checkOut DateTime
+  roomsBooked Int
+
+  @@map("booking_table")
+}

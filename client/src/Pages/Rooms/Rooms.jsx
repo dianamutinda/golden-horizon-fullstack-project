@@ -65,7 +65,9 @@ const Rooms = () => {
             <div className="room-content">
               <h3>{room.title}</h3>
               <p>{room.description}</p>
-              <a href="">{room.link}</a>
+              <a href="/sign up" target="blank">
+                {room.link}
+              </a>
             </div>
           </div>
         ))}

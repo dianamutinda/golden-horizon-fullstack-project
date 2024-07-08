@@ -1,11 +1,38 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Authentification.css";
 import { useFormik } from "formik";
 import { useState } from "react";
 
+const apiurl = import.meta.env.VITE_API_URL_ROOT;
+
 const SignUp = () => {
   const [error, setError] = useState(false);
+
   const navigate = useNavigate();
+  const handleSubmit = async (formState) => {
+    try {
+      const response = await fetch(`${apiurl}/api/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success === true) {
+        // setError(false);
+        navigate("/log in");
+      } else {
+        setError(response.message);
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -16,32 +43,9 @@ const SignUp = () => {
       password: "",
       conPassword: "",
     },
-    onSubmit: async (formState) => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/users/register",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formState),
-          },
-        );
-        const data = await response.json();
-        if (data.success === true) {
-          navigate("/log in");
-        } else {
-          setError(data.message);
-        }
-
-        console.log(response);
-      } catch (error) {
-        setError(error.message);
-      }
-    },
+    onSubmit: handleSubmit,
   });
-  // console.log(formik.values);
+
   return (
     <section>
       <div className="form1">
@@ -97,7 +101,7 @@ const SignUp = () => {
                 onChange={formik.handleChange}
               />
             </div>
-            <div className="form-comp">
+            {/* <div className="form-comp">
               <label htmlFor="password">confirm password</label>
               <input
                 type="password"
@@ -106,7 +110,7 @@ const SignUp = () => {
                 value={formik.values.conPassword}
                 onChange={formik.handleChange}
               />
-            </div>
+            </div> */}
             <div className="submit2">
               <button type="submit">sign up</button>
             </div>

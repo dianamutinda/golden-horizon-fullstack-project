@@ -1,5 +1,7 @@
 import express from "express";
 import userRoutes from "./routes/user.routes.js";
+import userContact from "./routes/contact.routers.js";
+import roomBook from "./routes/book.router.js";
 import cors from "cors";
 import { config } from "dotenv";
 config();
@@ -17,8 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
-app.use("/api/users/", userRoutes);
+app.use("/api/users/", userRoutes, userContact, roomBook);
 
-app.listen(3000, (req, res) => {
-  console.log("server running on port 3000...");
+
+app.listen(5000, () => {
+  console.log("server running on port 5000...");
 });

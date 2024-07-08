@@ -40,6 +40,7 @@
   text-transform: capitalize;
   border: none;
   width: 20rem;
+  margin-bottom: 10px;
 }
 .submit2 button:hover {
   background-color: #6e6c6c;

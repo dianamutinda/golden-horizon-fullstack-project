@@ -1,7 +1,12 @@
 import "./Contact.css";
 import { useFormik } from "formik";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+const apiurl = import.meta.env.VITE_API_URL_ROOT;
 
 const Contact = () => {
+  const [error, setError] = useState();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -11,8 +16,29 @@ const Contact = () => {
       message: "",
     },
 
-    onSubmit: (formState) => {
-      console.log(formState);
+    onSubmit: async (formState) => {
+      try {
+        setError(false);
+        const response = await fetch(`${apiurl}/api/users/contact`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formState),
+        });
+        // console.log(response);
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success === true) {
+          // setError(false);
+          navigate("");
+        } else {
+          setError(response.message);
+        }
+      } catch (error) {
+        setError(error.message);
+      }
     },
   });
   // console.log(formik.values);
@@ -81,6 +107,7 @@ const Contact = () => {
           <div className="submit">
             <button type="submit">submit</button>
           </div>
+          <p className="errormsg">{error && error}</p>
         </form>
       </div>
       <div className="map">

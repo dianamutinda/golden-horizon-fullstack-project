@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", async (req, res) => {
   try {
     const { firstName, lastName, email, phone, password } = req.body;
 
@@ -43,7 +43,6 @@ router.post("/register", async (req, res, next) => {
       return res
         .status(400)
         .json({ success: false, message: "Number already taken" });
-    next();
 
     const hashedPassword = bcrypt.hashSync(password, 10);
     const newUser = await prisma.user.create({
@@ -55,9 +54,8 @@ router.post("/register", async (req, res, next) => {
         password: hashedPassword,
       },
     });
-    res
-      .status(201)
-      .json({ success: true, message: "user registered successfully" });
+
+    res.status(201).json({ success: true, message: newUser });
   } catch (error) {
     console.log(error.message);
     res
